@@ -98,4 +98,74 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         setClock('.timer', deadline );
+
+        ///Modal
+
+        const modalTrigger = document.querySelectorAll('[data-modal]'),
+              modal = document.querySelector('.modal'),
+              modalCloseBtn = document.querySelector('[data-close]');
+
+
+
+        function openModal() {
+        modal.classList.add('show');
+        modal.classList.remove('hide');
+        // modal.classList.toggle('hide');
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimerId);
+    }
+
+        modalTrigger.forEach(btn => {
+
+            btn.addEventListener('click', openModal);
+
+
+        });
+
+
+
+        function closeModal() {
+            modal.classList.add('hide');
+            modal.classList.remove('show');
+            // modal.classList.toggle('hide'); 
+            document.body.style.overflow = '';
+        };
+
+        modalCloseBtn.addEventListener('click', closeModal );
+
+
+
+    ///закрытие модального окна , при клике на подложку
+
+
+    modal.addEventListener("click", (e) => {
+        if(e.target === modal) {
+            closeModal();  
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if(e.code ==='Escape' && modal.classList.contains('show')) {
+            closeModal();
+        }
+
+        
+    });
+
+///// вызов модального окна, через определенное время
+
+    // const modalTimerId = setTimeout(openModal, 3000);
+
+    function showModalByScroll () {
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight -1) {
+            openModal();
+            window.removeEventListener('scroll', showModalByScroll );
+        }
+    }
+
+    window.addEventListener('scroll', showModalByScroll);
+
+
+// Используем классы для карточек
+
 });
