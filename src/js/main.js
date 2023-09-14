@@ -272,10 +272,8 @@ class MenuCard {
         `;
         form.insertAdjacentElement('afterend', statusMassage);
 
-        const request = new XMLHttpRequest();
-        request.open('POST', 'server.php');
+
         
-        request.setRequestHeader('Content-type', 'application/json');
 
         const formData = new FormData(form);
 
@@ -287,24 +285,31 @@ class MenuCard {
         });
 
 
-        const json = JSON.stringify(object);
-       
 
-        request.send(json);
+        fetch('server.php', {
+            method: 'POST',
+            headers: {
+                'Content-type':'application/json'
+            },
+            body: JSON.stringify(object)
 
-        request.addEventListener('load', () => {
-            if (request.status === 200) {
-                console.log(request.response);
+        })
+        .then(data => data.text())
+        .then(data => {
+                console.log(data);
                 showThanksModal(message.success);
                 statusMassage.remove();
-                form.reset(); //  сброс формы  
-                    
-                } else {
-                    showThanksModal(message.failure);
-                }
-            });
+                 //  сброс формы              
+        }).catch(() => {
+            showThanksModal(message.failure);
+        }).finally(() => {
+            form.reset();
         });
+
+            });
+       
     }
+
   function showThanksModal(message) {
     const prevModalDialog = document.querySelector('.modal__dialog');
 
@@ -327,4 +332,7 @@ class MenuCard {
         closeModal();
     }, 4000);
 }
+
+
+
 });
